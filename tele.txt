@@ -1,0 +1,40 @@
+local plr = game.Players.LocalPlayer
+local mouse = plr:GetMouse()
+local tool = Instance.new("Tool")
+
+tool.Name = "flo cho 2 thienducscript*"
+tool.RequiresHandle = false -- không hiện vật cầm tay (invisible, sạch sẽ)
+tool.CanBeDropped = true
+tool.Parent = plr.Backpack
+
+local function notif(title, text, dur)
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = title or "Flo Tool";
+        Text = text;
+        Duration = dur or 5;
+    })
+end
+
+-- Thông báo khi bật script
+notif("Flo Tool Loaded", "flo cho thienducscript để thêm nhiều script", 8)
+
+tool.Equipped:Connect(function()
+    notif("Tool Đã Cầm", "Click chuột để dịch chuyển đến vị trí con trỏ")
+    mouse.Icon = "rbxasset://textures\\GunCursor.png" -- con trỏ dạng ngắm
+end)
+
+tool.Unequipped:Connect(function()
+    mouse.Icon = "" -- trả lại con trỏ bình thường
+end)
+
+tool.Activated:Connect(function()
+    local char = plr.Character or plr.CharacterAdded:Wait()
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+
+    if hrp then
+        local targetPos = mouse.Hit.p + Vector3.new(0, 5, 0) -- +5 để tránh lọt sàn
+        hrp.CFrame = CFrame.new(targetPos)
+        hrp.Velocity = Vector3.new(0, 0, 0) -- giảm fling
+        hrp.RotVelocity = Vector3.new(0, 0, 0)
+    end
+end)
